@@ -8,7 +8,7 @@
       <input
         id="username"
         type="text"
-        [field]="form.username"
+        [formField]="form.username"
         [class.error]="showUsernameError"
       />
       @if (username.pending()) {
@@ -35,7 +35,7 @@
       <input
         id="email"
         type="email"
-        [field]="form.email"
+        [formField]="form.email"
         [class.error]="showEmailError"
       />
       @if (showEmailError) {

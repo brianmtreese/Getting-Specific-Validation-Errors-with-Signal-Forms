@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, resource, signal } from '@angular/core';
-import { form, Field, required, email, customError, validateAsync, debounce } from '@angular/forms/signals';
+import { form, FormField, required, email, validateAsync, debounce } from '@angular/forms/signals';
 
 interface SignUpForm {
   username: string;
@@ -11,7 +11,7 @@ interface SignUpForm {
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Field],
+  imports: [FormField],
 })
 export class FormComponent {
   protected model = signal<SignUpForm>({
@@ -27,32 +27,34 @@ export class FormComponent {
 		debounce(s.username, 500);
 
 		validateAsync(s.username, {
-			params: ({ value }) => {
-					const val = value();
-					if (!val || val.length < 3) return undefined;
-					return val;
+			// debounce: 500,
+			params: ctx => {
+				const val = ctx.value();
+				if (!val || val.length < 3) return undefined;
+				return val;
 			},
 			factory: username =>
-					resource({
-							params: username,
-							loader: async ({ params: username }) => {
-									const available = await this.checkUsernameAvailability(username);
-									return available;
-							}
-					}),
+				resource({
+					params: username,
+					loader: async ({ params: username }) => {
+						if (username === undefined) return undefined;
+						const available = await this.checkUsernameAvailability(username);
+						return available;
+					},
+				}),
 			onSuccess: (result: boolean) => {
 				if (!result) {
-						return customError({
-								kind: 'username_taken',
-								message: 'This username is already taken',
-						});
+					return {
+						kind: 'username_taken',
+						message: 'This username is already taken',
+					};
 				}
 				return null;
 			},
 			onError: (error: unknown) => {
-					console.error('Validation error:', error);
-					return null;
-			}
+				console.error('Validation error:', error);
+				return null;
+			},
 		});
 	});
 
