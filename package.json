@@ -1,5 +1,5 @@
 {
-  "name": "angular-starter",
+  "name": "angular-targeted-validation-errors-signal-forms",
   "private": true,
   "scripts": {
     "start": "ng serve --no-hmr",

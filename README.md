@@ -1,19 +1,19 @@
-# Angular 22: Signal Forms Debounce Async Validation
+# Angular 22: Getting Specific Validation Errors with Signal Forms
 
-This repository demonstrates the new inline `debounce` option introduced in Angular v22.0.0-next.5 for Signal Forms.
+This repository demonstrates how to use the new `getError()` function introduced in Angular v22.0.0-next.6 for Signal Forms.
 
-When building complex forms, you often need to check data against a backend (e.g., verifying if a username or email is available). To avoid spamming the API on every keystroke, these checks need to be debounced.
+When building complex forms with multiple validation rules on a single field (like a password field requiring an uppercase letter, a number, a special character, and a minimum length), you often need to display specific messages or UI states based on which exact rule failed.
 
-Previously, using the standalone `debounce()` function in Signal Forms would debounce **all** validators on a field, meaning even synchronous checks (like `required` or `minLength`) were delayed.
+Previously in Signal Forms, trying to access a specific error by its index in the `errors()` array was unreliable because the array order changes dynamically as errors are added and removed. Using `errors().find()` was a functional but verbose workaround.
 
-With Angular 22, you can now pass a `debounce` timer directly into the configuration object for `validateAsync` and `validateHttp`. This scopes the delay strictly to the async call, allowing synchronous validators to fire instantly.
+With Angular 22, the `FieldState` now includes a `getError(kind: string)` method that explicitly returns the first validation error matching the provided kind, making template logic much cleaner and less prone to bugs.
 
 ## Features Demonstrated
 
 - **Signal Forms**: Uses the new `form()` and `FormField` APIs from `@angular/forms/signals`.
-- **`validateAsync`**: Simulates a backend call using a `Promise` to check if a username is taken.
-- **`validateHttp`**: Uses an HTTP interceptor to mock a backend response checking if an email is registered.
-- **Inline Debouncing**: Shows how to use the new `debounce: 2000` option within the validator configuration to prevent unnecessary API calls without blocking synchronous validation.
+- **Custom Validators**: Demonstrates how to create and apply multiple synchronous validators to a single field using the `validate()` function.
+- **The `getError()` Function**: Shows how to use `getError('missingUppercase')`, `getError('missingNumber')`, etc., directly in the template to conditionally apply CSS classes.
+- **Dynamic UI State**: Conditionally styling a list of password requirements as they are satisfied by the user's input.
 
 ## Running the Demo
 
@@ -31,5 +31,5 @@ With Angular 22, you can now pass a `debounce` timer directly into the configura
 
 ## Related
 
-- [Watch the tutorial on YouTube](https://youtu.be/4ynDt0-Cj7A)
+- Watch the tutorial on YouTube: Soon...
 - [Signal Forms full course](https://www.udemy.com/course/angular-signal-forms/?couponCode=021409EC66FC6440B867)

@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } fr
 import { bootstrapApplication } from '@angular/platform-browser';
 import { emailAvailabilityMockInterceptor } from './email-availability.mock.interceptor';
 import { FormComponent } from './form/form.component';
+import { NG_STATUS_CLASSES } from '@angular/forms/signals/compat';
+import { provideSignalFormsConfig } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-root',
@@ -17,5 +19,8 @@ bootstrapApplication(App, {
   providers: [
     provideZonelessChangeDetection(),
     provideHttpClient(withInterceptors([emailAvailabilityMockInterceptor])),
+    provideSignalFormsConfig({
+      classes: NG_STATUS_CLASSES
+    })
   ],
 });

@@ -1,50 +1,91 @@
 <div class="form-container">
   <h2>Create Account</h2>
+
+  
+  <!-- <form [formGroup]="signUpForm">
+    <div class="field">
+      <label for="username">Username</label>
+      <input id="username" type="text" formControlName="username" />
+      @if (signUpForm.controls.username.invalid && signUpForm.controls.username.touched) {
+        <ul class="error-message">
+          @if (signUpForm.controls.username.hasError('required')) {
+            <li>A username is required</li>
+          }
+        </ul>
+      }
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" />
+      <ol [class.dirty]="signUpForm.controls.password.dirty">
+        
+        <li [class.valid]="!signUpForm.controls.password.hasError('missingUppercase')">
+          One uppercase letter
+        </li>
+        <li [class.valid]="!signUpForm.controls.password.hasError('missingNumber')">
+          One number
+        </li>
+        <li [class.valid]="!signUpForm.controls.password.hasError('missingSpecialChar')">
+          One special character
+        </li>
+        <li [class.valid]="!signUpForm.controls.password.hasError('minlength') && signUpForm.controls.password.value">
+          At least 8 characters
+        </li>
+      </ol>
+    </div>
+    <button type="submit" [disabled]="signUpForm.invalid">
+      Create Account
+    </button>
+  </form> -->
+
+
   <form>
     <div class="field">
-      @let username = form.username();
-      @let showUsernameError = username.invalid() && username.touched();
       <label for="username">Username</label>
       <input
         id="username"
         type="text"
         [formField]="form.username"
-        [class.error]="showUsernameError"
       />
-      @if (username.pending()) {
-        <p class="info">Checking availability...</p>
-      }
-      @if (showUsernameError) {
+      @if (form.username().invalid() && form.username().touched()) {
         <ul class="error-message">
-          @for (error of username.errors(); track error.kind) {
+          @for (error of form.username().errors(); track error.kind) {
             <li>{{ error.message }}</li>
           }
         </ul>
       }
     </div>
     <div class="field">
-      @let email = form.email();
-      @let showEmailError = email.invalid() && email.touched();
-      <label for="email">Email</label>
+      <label for="password">Password</label>
       <input
-        id="email"
-        type="email"
-        [formField]="form.email"
-        [class.error]="showEmailError"
+        id="password"
+        type="password"
+        [formField]="form.password"
       />
-      @if (email.pending()) {
-        <p class="info">Verifying email…</p>
-      }
-      @if (showEmailError) {
-        <ul class="error-message">
-          @for (error of email.errors(); track error.kind) {
-            <li>{{ error.message }}</li>
-          }
-        </ul>
-      }
+      <ol [class.dirty]="form.password().dirty()">
+        <!-- <li [class.valid]="!form.password().errors()[2]"> -->
+        <!-- <li [class.valid]="!form.password().errors().find(e => e.kind === 'missingUppercase')"> -->
+        <li [class.valid]="!form.password().getError('missingUppercase')">
+          One uppercase letter
+        </li>
+        <li [class.valid]="!form.password().getError('missingNumber')">
+          One number
+        </li>
+        <li [class.valid]="!form.password().getError('missingSpecialChar')">
+          One special character
+        </li>
+        <li [class.valid]="!form.password().getError('minLength')">
+          At least 8 characters
+        </li>
+      </ol>
     </div>
     <button type="submit" [disabled]="form().invalid()">
       Create Account
     </button>
   </form>
+</div>
+
+<div class="form-container">
+  <strong>Password Field Errors</strong>
+  <pre>{{ form.password().errors() | json }}</pre>
 </div>
