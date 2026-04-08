@@ -74,7 +74,7 @@
         <li [class.valid]="!form.password().getError('missingSpecialChar')">
           One special character
         </li>
-        <li [class.valid]="!form.password().getError('minLength')">
+        <li [class.valid]="!form.password().getError('minLength') && form.password().value()">
           At least 8 characters
         </li>
       </ol>
